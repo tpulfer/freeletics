@@ -9,6 +9,7 @@ import configargparse
 
 URL_LOGIN = 'https://api.freeletics.com/user/v1/auth/password/login'
 URL_FEED = 'https://api.freeletics.com/v3/users/{}/feed_entries?page={}'
+URL_PROFILE = 'https://api.freeletics.com/v3/users/{}'
 CONFIG_FILENAME = 'freeletics.conf'
 
 def get_feedpage(token, i):
@@ -27,6 +28,12 @@ def get_feedentries(token):
         i += 1
         page_feed_entries = get_feedpage(token, i)
     return feed_entries
+
+def get_profile(token, user_id):
+    """ Get profile"""
+    response = requests.get(URL_PROFILE.format(user_id), headers=token.header)
+    profile = json.loads(response.text)
+    return profile['user']
 
 def do_login(user, password):
     """Log-in and return auth token"""
